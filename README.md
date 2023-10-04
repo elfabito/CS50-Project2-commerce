@@ -22,7 +22,6 @@ Users who are signed in should be able to add comments to the listing page. The 
 
 
 # Getting Started
-
 In your terminal, cd into the commerce directory.
-Run python manage.py makemigrations auctions to make migrations for the auctions app.
-Run python manage.py migrate to apply migrations to your database.
+* Run python manage.py makemigrations auctions to make migrations for the auctions app.
+* Run python manage.py migrate to apply migrations to your database.
