@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+{% block count%} 
+{% if count != 0 %}
+<span class="square">{{count}}</span>
+{%endif%} 
+{% endblock %}
+{% block body %}
+<h2>Categories</h2>
+
+{% for category in list %}
+
+<div id="auction">
+    <ul>
+        <div class="content">
+            <li><a href="{% url 'post_category' category.id %}">{{category}}</a></li>
+        </div>
+    </ul>
+</div>
+
+{%endfor%}
+
+{% endblock %}

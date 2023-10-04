@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+{% block count%}
+{% if count != 0 %}
+<span class="square">{{count}}</span>
+{%endif%}
+{% endblock %}
+{% block body %}
+<h2>Create Listing</h2>
+
+<div id="auction">
+    <form method="POST" action="">
+
+        {% csrf_token %}
+
+        <br>
+        <p><label>Title:</label></p>
+        {{form.title|linebreaks}}
+        <p><label>Description:</label></p>
+        {{form.description}}
+        <br><br>
+        <p><label>Image (URL): </label></p>
+        <p>Replace if you have an image
+            {{form.image|linebreaks}}
+        </p>
+        <p><label>Categories:</label></p>
+        {{form.category}}
+        <br><br>
+        <p><label>Price:</label></p>
+        {{form.price}}
+        <br><br>
+        <button type="submit">Save </button>
+        <br>
+    </form>
+
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "auctions/layout.html" %}
+
+{% block count%}
+{% if count != 0 %}
+<span class="square">{{count}}</span>
+{%endif%}
+{% endblock %}
+{% block body %}
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+        {{ message }}
+        {% endfor %}
+    </li>
+</ul>
+{% endif %}
+
+<h2>Listing: {{form.title}} </h2>
+
+<div id="list">
+
+
+    <div id="listings">
+        <img src="{{form.image}}" width="400px" alt="">
+        <div id="content">
+            <p>{{form.description}}</p>
+            {% if bid.item.current_bid == 0 %}
+            <h3>Price: $ {{bid.item.price}}</h3>
+            {%else%}
+            <h3>Price: $ {{bid.item.current_bid}}</h3>
+            <br>
+            {%endif%}
+            <h5>Start price : {{bid.item.price}}</h5>
+            {% if form.closed and bid.item.current_bid == 0%}
+
+            <h4> This Auction is closed. Without bids
+            </h4>
+            {%elif form.closed and not user.is_authenticated %}
+            <h4> This Auction is closed. Log in to see who is the winner
+            </h4>
+            {%elif form.closed and bid.item.current_bid != 0 %}
+            <h4> This Auction is closed. {% if bids.user == user %} You {%else%} {{bids.user}} {%endif%} won this
+                auctions
+            </h4>
+
+            {%else%}
+            <span>{{ bid_count }} bid(s) so far.
+
+                {% if bids.user == user or bid_count == 0 and form.user == user%}
+                Your
+                {%elif bid_count == 0 %}
+                {{form.user}}
+                {%else%}
+                {{ bids.user }}
+                {%endif%}
+                bid is the current bid
+            </span>
+            <br><br>
+
+
+
+            {% if user.is_authenticated %}
+
+            <form action="{% url 'post_bid' form.id %}" method="POST">
+                {% csrf_token %}
+                {{bid.bids}}
+                <br><br>
+                <input type="submit" value="Palce Bid" />
+            </form>
+
+            <hr>
+
+            <form action="{% url 'watchlist' form.id %}" method="POST">
+                {% csrf_token %}
+                {% if watched %}
+                <input type="submit" value="Remove from Watchlist" />
+                {% else %}
+                <input type="submit" value="Add to Watchlist" />
+                {% endif %}
+            </form>
+
+
+            {% if form.user.id == user.id %}
+            <form action="{% url 'closed' form.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Close Item" />
+            </form>
+            {% endif %}
+
+            {% else %}
+            <h4>You must Login for place a bid</h4>
+            {% endif %}
+            {% endif %}
+            <div>
+                <h3>Details</h3>
+                <ul>
+                    <li>Listed by {{form.user.username}}</li>
+                    <li>
+                        {{ form.category }}
+                    </li>
+                    <li>{{form.date}}</li>
+                </ul>
+                <hr>
+                <h3>All Comments</h3>
+                <br>
+                {% for comment in all_comments %}
+
+                {{comment}}
+                <br><br>
+
+                {%endfor%}
+                {% if user.is_authenticated and not form.closed %}
+                <form action="{% url 'post_comment' form.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ comment_form.comments }}
+                    <br><br>
+                    <input type="submit" value="Enviar" />
+                </form>
+                {%endif%}
+                <br><br>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

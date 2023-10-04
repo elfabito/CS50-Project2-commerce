@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+{% block count%}
+{% if count != 0 %}
+<span class="square">{{count}}</span>
+{%endif%}
+{% endblock %}
+{% block body %}
+<h2>Watchlist: </h2>
+{{ watchlist.item.title }}
+
+<div id="list">
+    {% for auction in watchlist %}
+
+    <div id="auction">
+        <img src="{{auction.item.image}}" width="400px" alt="">
+        <div id="content">
+            <h2><a href="{% url 'listings' auction.item.id %}">{{auction.item.title}}</a></h2>
+            <br>
+            <h3>Price: $ {{auction.item.price}}</h3>
+            <br>
+            <p>{{auction.item.description}}</p>
+            <span>Created {{auction.item.date}}</span>
+        </div>
+
+    </div>
+    {%endfor%}
+</div>
+
+{% endblock %}
